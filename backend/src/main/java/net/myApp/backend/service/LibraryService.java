@@ -6,6 +6,7 @@ import net.myApp.backend.repository.LibraryRepository;
 import net.myApp.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -20,10 +21,12 @@ public class LibraryService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public List<Library> getAllLibraries(){
         return libraryRepository.findAll();
     }
 
+    @Transactional
     public boolean createLibrary(Library library, String username){
         Optional<User> userOptional = userRepository.findUserByUsername(username);
         boolean isUserExist = userOptional.isPresent();
