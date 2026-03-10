@@ -21,11 +21,13 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/book/**").authenticated().
-                antMatchers("/library/**").authenticated()
+                .antMatchers("/user/createUser").permitAll()
+                .antMatchers("/user/**", "/book/**", "/library/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic();
+
+        http.csrf().disable();
     }
 
     @Override

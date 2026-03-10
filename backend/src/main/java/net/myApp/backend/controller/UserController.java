@@ -6,6 +6,8 @@ import net.myApp.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -23,22 +25,26 @@ public class UserController {
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/username/{username}")
-    public ResponseEntity<User> getUserByUsername(@PathVariable String username){
+    @GetMapping("/fetchUser")
+    public ResponseEntity<User> getUserByUsername(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         Optional<User> user = userService.findUserByUsername(username);
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping
+    @PostMapping("/createUser")
     public ResponseEntity<?> createUser(@RequestBody User user){
+        if(user.getRoles() == null) user.setRoles("USER");
         boolean isCreated = userService.saveUser(user);
-
         return isCreated ? new ResponseEntity<>(HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/{userid}")
-    public ResponseEntity<?> updateUser(@PathVariable Long userid, @RequestBody User newUser){
-        Optional<User> user = userService.findUserById(userid);
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody User newUser){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> user = userService.findUserByUsername(username);
         if(user.isPresent()){
            User oldUser = user.get();
            oldUser.setEmail(newUser.getEmail());
@@ -52,10 +58,11 @@ public class UserController {
 
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id){
-        boolean isDeleted = userService.deleteUser(id);
-
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        boolean isDeleted = userService.deleteUser(username);
         return isDeleted ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }

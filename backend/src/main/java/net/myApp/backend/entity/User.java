@@ -20,8 +20,8 @@ public class User {
     private String email;
 
     private String password;
-
-    private List<String> roles;
+    
+    private String roles;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "library_id")

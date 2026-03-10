@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -23,9 +25,10 @@ public class UserDetailServiceImp implements UserDetailsService {
             return org.springframework.security.core.userdetails.User.builder()
                     .username(user.get().getUsername())
                     .password(user.get().getPassword())
-                    .roles(user.get().getRoles().toArray(new String[0]))
+                    .roles(user.get().getRoles())
                     .build();
         }
         throw new UsernameNotFoundException("Username not found");
+
     }
 }
