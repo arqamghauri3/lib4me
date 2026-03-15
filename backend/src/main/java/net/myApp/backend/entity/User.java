@@ -1,12 +1,18 @@
 package net.myApp.backend.entity;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@ToString(exclude = "library")
+@EqualsAndHashCode(exclude = "library")
 public class User {
 
     @Id
@@ -18,10 +24,10 @@ public class User {
     private String email;
 
     private String password;
-    
+
     private String roles;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "library_id")
     private Library library;
 }
