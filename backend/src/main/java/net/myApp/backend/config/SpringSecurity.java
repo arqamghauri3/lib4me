@@ -23,6 +23,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/user/createUser").permitAll()
                 .antMatchers("/user/**", "/book/**", "/library/**").authenticated()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic();
