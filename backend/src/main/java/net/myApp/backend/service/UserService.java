@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,23 +32,19 @@ public class UserService {
 
     @Transactional
     public boolean saveUser(User user){
-        try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
             return true;
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }
     }
 
     @Transactional
     public boolean deleteUser(String username){
-        try {
             userRepository.deleteUserByUsername(username);
             return true;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    }
+
+    public List<User> getAll(){
+            return userRepository.findAll();
     }
 
 }
