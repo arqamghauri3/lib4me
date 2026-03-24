@@ -3,6 +3,10 @@ package net.myApp.backend.repository;
 import net.myApp.backend.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface BookRepository extends JpaRepository<Book, Long> {
 
+    Optional<Book> findBookByKey(String key);
 }

@@ -1,17 +1,15 @@
 package net.myApp.backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "author")
-@Setter
+@Table(name = "genre")
 @Getter
-public class Author {
+@Setter
+public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -21,7 +19,4 @@ public class Author {
 
     private String key;
 
-    @OneToMany(mappedBy = "author")
-    @JsonIgnore
-    private List<Book> books;
 }

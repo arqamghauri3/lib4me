@@ -1,13 +1,16 @@
 package net.myApp.backend.controller;
 
 import net.myApp.backend.entity.Book;
+import net.myApp.backend.entity.Genre;
 import net.myApp.backend.service.BookService;
+import net.myApp.backend.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/book")
@@ -16,11 +19,13 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    @Autowired
+    private GenreService genreService;
+
     @PostMapping
     public ResponseEntity<?> saveBook(@RequestBody Book book){
-
-        boolean isCreated = bookService.saveBook(book);
-        if(isCreated) return new ResponseEntity<>(HttpStatus.CREATED);
+        Book bookCreated = bookService.saveBook(book);
+        if(bookCreated != null) return new ResponseEntity<>(HttpStatus.CREATED);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 

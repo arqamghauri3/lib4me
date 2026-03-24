@@ -1,6 +1,7 @@
 package net.myApp.backend.controller;
 
 
+import net.myApp.backend.entity.Library;
 import net.myApp.backend.entity.User;
 import net.myApp.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class UserController {
     @PostMapping("/createUser")
     public ResponseEntity<?> createUser(@RequestBody User user){
         if(user.getRoles() == null) user.setRoles("USER");
+        if(user.getLibrary() == null ) user.setLibrary(new Library());
         boolean isCreated = userService.saveUser(user);
         return isCreated ? new ResponseEntity<>(HttpStatus.CREATED) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

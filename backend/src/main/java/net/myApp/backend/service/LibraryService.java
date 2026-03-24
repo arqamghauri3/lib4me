@@ -1,17 +1,23 @@
 package net.myApp.backend.service;
 
+import net.myApp.backend.entity.Book;
 import net.myApp.backend.entity.Library;
 import net.myApp.backend.entity.User;
+import net.myApp.backend.repository.BookRepository;
 import net.myApp.backend.repository.LibraryRepository;
 import net.myApp.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class LibraryService {
@@ -21,6 +27,9 @@ public class LibraryService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @Transactional(readOnly = true)
     public List<Library> getAllLibraries(){
@@ -84,4 +93,17 @@ public class LibraryService {
         user.setLibrary(null);
         return true;
     }
+
+    @Transactional
+    public boolean addBookInLibrary(Book book, Library library) {
+        if (library.getBookList() == null) {
+            library.setBookList(new HashSet<>());
+        }
+
+        library.getBookList().add(book);
+        libraryRepository.save(library);
+
+        return true;
+    }
+
 }
