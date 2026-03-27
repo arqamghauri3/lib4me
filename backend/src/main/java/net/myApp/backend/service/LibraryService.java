@@ -73,7 +73,7 @@ public class LibraryService {
             if (isUserExist) {
                 User user = userOptional.get();
                 Library oldLibrary = user.getLibrary();
-                oldLibrary.setBookList(library.getBookList());
+                oldLibrary.setBooks(library.getBooks());
                 oldLibrary.setModified_at(Instant.now());
                 libraryRepository.save(oldLibrary);
                 user.setLibrary(oldLibrary);
@@ -96,11 +96,11 @@ public class LibraryService {
 
     @Transactional
     public boolean addBookInLibrary(Book book, Library library) {
-        if (library.getBookList() == null) {
-            library.setBookList(new HashSet<>());
+        if (library.getBooks() == null) {
+            library.setBooks(new HashSet<>());
         }
 
-        library.getBookList().add(book);
+        library.getBooks().add(book);
         libraryRepository.save(library);
 
         return true;
