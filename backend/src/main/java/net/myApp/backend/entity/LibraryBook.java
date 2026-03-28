@@ -1,5 +1,6 @@
 package net.myApp.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class LibraryBook {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "library_id", nullable = false)
+    @JsonIgnore
     private Library library;
 
     @ManyToOne(optional = false)

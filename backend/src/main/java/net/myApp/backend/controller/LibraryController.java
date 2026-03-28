@@ -63,7 +63,7 @@ public class LibraryController {
     }
 
     @PostMapping("add-books")
-    public ResponseEntity<?> addBooksInLibrary(@RequestBody Book book){
+    public ResponseEntity<?> addBooksInLibrary(@RequestBody Book book, @RequestParam String status){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Book createdBook = bookService.saveBook(book);
@@ -71,7 +71,7 @@ public class LibraryController {
         boolean isPresent = libraryOptional.isPresent();
         boolean isCreated = false;
         if(isPresent){
-            isCreated = libraryService.addBookInLibrary(createdBook,libraryOptional.get());
+            isCreated = libraryService.addBookInLibrary(createdBook,libraryOptional.get(), status);
         }
 
         return isCreated ? new ResponseEntity<Library>(libraryOptional.get(), HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);

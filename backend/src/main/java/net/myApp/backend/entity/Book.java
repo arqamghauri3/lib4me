@@ -1,5 +1,6 @@
 package net.myApp.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
@@ -51,11 +52,8 @@ public class Book {
     )
     private Set<Genre> genreList;
 
-    private Integer readPages;
-
-    private String status;
-
     @OneToMany(mappedBy = "book", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore
     private Set<LibraryBook> libraryEntries = new HashSet<>();
 
 
