@@ -2,6 +2,7 @@ package net.myApp.backend.service;
 
 import net.myApp.backend.entity.Book;
 import net.myApp.backend.entity.Library;
+import net.myApp.backend.entity.ReadingStatus;
 import net.myApp.backend.entity.User;
 import net.myApp.backend.repository.BookRepository;
 import net.myApp.backend.repository.LibraryRepository;
@@ -73,7 +74,7 @@ public class LibraryService {
             if (isUserExist) {
                 User user = userOptional.get();
                 Library oldLibrary = user.getLibrary();
-                oldLibrary.setBookList(library.getBookList());
+                oldLibrary.setBooks(library.getBooks());
                 oldLibrary.setModified_at(Instant.now());
                 libraryRepository.save(oldLibrary);
                 user.setLibrary(oldLibrary);
@@ -95,14 +96,9 @@ public class LibraryService {
     }
 
     @Transactional
-    public boolean addBookInLibrary(Book book, Library library) {
-        if (library.getBookList() == null) {
-            library.setBookList(new HashSet<>());
-        }
-
-        library.getBookList().add(book);
+    public boolean addBookInLibrary(Book book, Library library, String status) {
+        library.addBook(book, ReadingStatus.valueOf(status));
         libraryRepository.save(library);
-
         return true;
     }
 
